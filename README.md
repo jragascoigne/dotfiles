@@ -1,4 +1,4 @@
-# SketchyBar dotfiles
+# dotfiles
 
 A compact macOS SketchyBar configuration with Aerospace workspaces, a right-side Spotify now-playing widget, teal accents, and a 38 px bar.
 
