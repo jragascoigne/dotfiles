@@ -177,15 +177,19 @@ sbar.exec(query_workspaces, function(workspaces_and_monitors)
 		table.insert(workspace_items, workspace.name)
 
 		workspace:subscribe("aerospace_workspace_change", function(env)
-			local focused_workspace = env.FOCUSED_WORKSPACE
-			local is_focused = focused_workspace == workspace_index
+			sbar.exec("aerospace list-workspaces --focused", function(focused_workspace)
+				focused_workspace = focused_workspace:match("^%s*(.-)%s*$")
+				local is_focused = focused_workspace == workspace_index
+				local color = is_focused and appearance.colors.accent2 or style.icon.color
+				local label_color = is_focused and appearance.colors.accent2 or style.label.color
 
-			sbar.animate("tanh", 10, function()
-				workspace:set({
-					icon = { highlight = is_focused },
-					label = { highlight = is_focused },
-					blur_radius = 30,
-				})
+				sbar.animate("tanh", 10, function()
+					workspace:set({
+						icon = { highlight = is_focused, color = color },
+						label = { highlight = is_focused, color = label_color },
+						blur_radius = 30,
+					})
+				end)
 			end)
 		end)
 	end
@@ -272,8 +276,8 @@ sbar.exec(query_workspaces, function(workspaces_and_monitors)
 	sbar.exec("aerospace list-workspaces --focused", function(focused_workspace)
 		focused_workspace = focused_workspace:match("^%s*(.-)%s*$")
 		workspaces[focused_workspace]:set({
-			icon = { highlight = true },
-			label = { highlight = true },
+			icon = { highlight = true, color = appearance.colors.accent2 },
+			label = { highlight = true, color = appearance.colors.accent2 },
 		})
 	end)
 end)
