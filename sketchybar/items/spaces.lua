@@ -6,6 +6,9 @@ local sbar = require("sketchybar")
 local query_workspaces =
 	"aerospace list-workspaces --all --format '%{workspace}%{monitor-appkit-nsscreen-screens-id}' --json"
 
+-- AeroSpace triggers this immediately after every workspace switch.
+sbar.add("event", "aerospace_workspace_change")
+
 -- Root is used to handle event subscriptions
 local root = sbar.add("item", { drawing = false })
 local workspaces = {}

@@ -24,6 +24,8 @@ The installer installs SketchyBar, Lua, and the SbarLua module; preserves an exi
 
 The build downloads public source during installation. It does not use or distribute a machine-specific binary.
 
+For instant workspace updates, merge `aerospace.toml.snippet` into `~/.aerospace.toml`, then run `aerospace reload-config`.
+
 ## Customize
 
 | Change | File |

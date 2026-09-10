@@ -35,7 +35,7 @@ M.colors = {
 	bg4 = 0x33000000,
 
 	accent = 0xFF2ec7ad,
-	accent2 = 0xffe85159,
+	accent2 = 0xfff78ba9,
 	accent_bright = 0x00efc2fc,
 	accent_tbright = 0x33efc2fc,
 

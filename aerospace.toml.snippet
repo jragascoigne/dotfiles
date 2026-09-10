@@ -1,0 +1,4 @@
+# Add this to ~/.aerospace.toml, then run: aerospace reload-config
+exec-on-workspace-change = ['/bin/bash', '-c',
+    '$HOME/.config/sketchybar/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+]
