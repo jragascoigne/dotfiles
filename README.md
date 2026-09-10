@@ -1,15 +1,5 @@
 # dotfiles
 
-A compact macOS SketchyBar configuration with Aerospace workspaces, a right-side Spotify now-playing widget, teal accents, and a 38 px bar.
-
-## What is included
-
-- Spotify title updates via Spotify's playback-change notification, hides when nothing is playing, and has a slow reversible marquee.
-- Space Mono typography, with italics limited to Spotify, the focused app label, and the date.
-- Aerospace workspace and current-app display.
-- Battery, volume, date, and time widgets.
-- A pinned SketchyBar `v2.24.0` source patch that makes the marquee scroll by pixels, pause for two seconds at either end, reverse, and reset whenever text changes.
-
 ## Install
 
 Requirements: macOS, Xcode Command Line Tools, Homebrew, and Aerospace. Install the **Space Mono** and **Hack Nerd Font** fonts before starting.
