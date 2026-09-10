@@ -1,0 +1,4 @@
+.DS_Store
+sketchybar/helpers/**/bin/
+sketchybar/helpers/**/*.o
+.install-tmp/

@@ -1,0 +1,78 @@
+diff --git a/src/text.c b/src/text.c
+--- a/src/text.c
++++ b/src/text.c
+@@ -277,32 +277,50 @@ bool text_animate_scroll(struct text* text) {
+   if (text->has_const_width && text->custom_width < text->width) return false;
+   if (text->width == 0 || text->width == text->bounds.size.width) return false;
+ 
+-  g_bar_manager.animator.duration = text->scroll_duration
+-                                    * (text->bounds.size.width / text->width);
++  float scroll_distance = max(text->bounds.size.width - text->width, 0);
++  uint32_t scroll_duration = text->scroll_duration
++                             * (scroll_distance / text->width);
++  if (scroll_duration < 1) scroll_duration = 1;
++
++  g_bar_manager.animator.duration = scroll_duration;
+   g_bar_manager.animator.interp_function = INTERP_FUNCTION_LINEAR;
+ 
+   bool needs_refresh = false;
+   ANIMATE_FLOAT(text_set_scroll,
+                 text,
+                 text->scroll,
+-                max(text->bounds.size.width, 0));
++                scroll_distance);
+ 
+   struct animation* animation = animation_create();
+-  float initial_value = text->scroll;
+-  float final_value = -max(text->width, 0);
++  float initial_value = scroll_distance;
++  float final_value = scroll_distance;
+ 
+   animation_setup(animation,
+                   (void*)text,
+                   (bool (*)(void*, int))text_set_scroll,
+                   *(int*)&initial_value,
+                   *(int*)&final_value,
+-                  0,
++                  120,
+                   INTERP_FUNCTION_LINEAR );
+   animation->as_float = true;
+   animator_add(&g_bar_manager.animator, animation);
+ 
+-  g_bar_manager.animator.duration = text->scroll_duration;
++  g_bar_manager.animator.duration = scroll_duration;
+   ANIMATE_FLOAT(text_set_scroll, text, text->scroll, 0);
+ 
++  animation = animation_create();
++  initial_value = 0;
++  final_value = 0;
++
++  animation_setup(animation,
++                  (void*)text,
++                  (bool (*)(void*, int))text_set_scroll,
++                  *(int*)&initial_value,
++                  *(int*)&final_value,
++                  120,
++                  INTERP_FUNCTION_LINEAR );
++  animation->as_float = true;
++  animator_add(&g_bar_manager.animator, animation);
++
+   g_bar_manager.animator.duration = 0;
+  g_bar_manager.animator.interp_function = '\0';
+@@ -528,6 +545,16 @@ bool text_parse_sub_domain(struct text* text, FILE* rsp, struct token property,
+                                    token_to_string(get_token(&message)),
+                                    false                                );
+ 
++    // A new label must begin its marquee at the leading edge.  This prevents
++    // the old animation from moving text after a Spotify track skip, even
++    // when the previous marquee is partway through its movement.
++    if (changed) {
++      needs_refresh |= animator_cancel(&g_bar_manager.animator,
++                                       text,
++                                       (animator_function*)text_set_scroll);
++      needs_refresh |= text_set_scroll(text, 0.f);
++    }
++
+     if (changed
+         && g_bar_manager.animator.duration > 0) {
+       uint32_t post_width = text_get_length(text, false);
